@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import model.App;
 import model.JSON;
+import model.XML;
 
 public class UserDetails extends JFrame implements ActionListener {
 
@@ -107,11 +108,13 @@ public class UserDetails extends JFrame implements ActionListener {
         if (e.getSource() == xmlMenu) {
             System.out.println("Exportar usuario (XML)");
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setSelectedFile(new File("usuario.xml"));
+            fileChooser.setSelectedFile(new File(datoNombre.getText() + ".xml"));
             int returnValue = fileChooser.showOpenDialog(null);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
+
+                XML.createXmlFileUser(app.getLoggedUser(), selectedFile);
                 System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
             } else {
                 System.out.println("Selección de archivo cancelada.");
@@ -121,7 +124,7 @@ public class UserDetails extends JFrame implements ActionListener {
         if (e.getSource() == jsonMenu) {
             System.out.println("Exportar usuario (JSON)");
             JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setSelectedFile(new File("usuario.json"));
+            fileChooser.setSelectedFile(new File(datoNombre.getText() + ".json"));
             int returnValue = fileChooser.showOpenDialog(null);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {

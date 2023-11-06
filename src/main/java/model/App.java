@@ -44,6 +44,16 @@ public class App {
         fileHandler.resetFile();
     }
 
+    public void setSession(boolean login) {
+        session = new Session();
+        session.setUser(loggedUser);
+        fileHandler.manageLoggerFile(session, login);
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
     public String getUserAge() {
         return String.valueOf(loggedUser.getAge());
     }
@@ -54,6 +64,10 @@ public class App {
 
     public String getUserPass() {
         return loggedUser.getPasswordHash();
+    }
+
+    public User getLoggedUser() {
+        return loggedUser;
     }
 
 }

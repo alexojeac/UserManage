@@ -107,7 +107,7 @@ public class User extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == btnCerrarSesion) {
-
+            app.setSession(false);
             dispose();
         }
 

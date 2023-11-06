@@ -1,10 +1,13 @@
 package model;
 
 import java.io.*;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 public class FileHandler {
     private File file;
     private Users usersCollection;
+    private static byte[] HEADER = new byte[]{(byte) 0xFF, (byte) 0xEE, 0x20, 0x23, (byte) 0xEE, (byte) 0xFF};
 
     public FileHandler(File file) {
         this.file = file;
@@ -13,55 +16,64 @@ public class FileHandler {
 
     public void createUsersFile() {
         if (!file.exists()) {
-            byte[] header = new byte[]{(byte) 0xFF, (byte) 0xEE, 0x20, 0x23, (byte) 0xEE, (byte) 0xFF};
             usersCollection = new Users();
             User admin = new User("admin", "admin", 0, "admin@admin.local");
             usersCollection.putUser(admin);
-            try (FileOutputStream fos = new FileOutputStream(file)) {
-                ObjectOutputStream oos = new ObjectOutputStream(fos);
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                baos.writeBytes(header);
-                oos.writeObject(usersCollection);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            newFileUsers();
         }
     }
 
     public Users readUsersFile() {
         usersCollection = new Users();
         try (FileInputStream fis = new FileInputStream(file)) {
+            fis.skip(6);
             ObjectInputStream ois = new ObjectInputStream(fis);
 
-            try {
-                usersCollection = (Users) ois.readObject();
-                return usersCollection;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+            usersCollection = (Users) ois.readObject();
+            return usersCollection;
+        } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void resetFile() {
         file.delete();
-        try (FileOutputStream fos = new FileOutputStream(file)) {
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+        newFileUsers();
+    }
 
+    private void newFileUsers() {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+            baos.writeBytes(HEADER);
+            baos.writeTo(fos);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(usersCollection);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
+    public void manageLoggerFile(Session session, boolean login) {
+        File sessionFile = new File("session.log");
+
+        StringBuilder sb = new StringBuilder(Timestamp.from(Instant.now()).toString());
+
+
+        try (FileWriter fileWriter = new FileWriter(sessionFile, true)) {
+            BufferedWriter buffer = new BufferedWriter(fileWriter);
+
+            if (login) {
+                buffer.write(sb.subSequence(0, 19) + " -> " + session.getSessionUserName() + " LOGIN");
+                buffer.newLine();
+            } else {
+                buffer.write(sb.subSequence(0, 19) + " -> " + session.getSessionUserName() + " LOGOUT");
+                buffer.newLine();
+            }
+
+            buffer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -2,14 +2,8 @@ package model;
 
 public class Session {
     private static User user;
+    public Session() {}
 
-    private static final Session instance = new Session();
-
-    private Session() {}
-
-    public static Session getInstance() {
-        return instance;
-    }
 
     public User getUser() {
         return user;
@@ -17,5 +11,9 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getSessionUserName() {
+        return user.getName();
     }
 }

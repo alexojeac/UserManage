@@ -16,6 +16,7 @@ public class Login extends JFrame implements ActionListener {
     private JTextField textoContraseña;
     private JButton btnIniciarSesion;
     private App app;
+    private Session session;
 
     public Login(App app) {
         this.app = app;
@@ -62,6 +63,8 @@ public class Login extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnIniciarSesion) {
             if (app.checkUser(textoUsuario.getText(), textoContraseña.getText())){
+                session = app.getSession();
+                app.setSession(true);
                 User userView = new User(app, textoUsuario.getText());
                 userView.setVisible(true);
             } else {
