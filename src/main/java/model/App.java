@@ -17,7 +17,7 @@ public class App {
 
     public Boolean checkUser(String userName, String pass) {
         this.loggedUser = users.getKeyValor(userName);
-        if (loggedUser != null && loggedUser.chekPass(pass)) {
+        if (loggedUser != null && loggedUser.checkPass(pass)) {
             return true;
         } else {
             return false;

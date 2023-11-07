@@ -14,41 +14,41 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class XML {
     public static void createXmlFileUser(User user, File selectedFile) {
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            DOMImplementation implementation = db.getDOMImplementation();
-            Document doc = implementation.createDocument(selectedFile.getAbsolutePath(), "root", null);
-
-            Element rootElement = doc.createElement("ususarios");
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+            Element rootElement = doc.createElement("users");
             doc.appendChild(rootElement);
-            Element userElement = doc.createElement("usuario");
+
+            Element userElement = doc.createElement("user");
             rootElement.appendChild(userElement);
-            Element nameElement = doc.createElement("nombre");
-            nameElement.appendChild(doc.createTextNode(user.getName()));
-            Element passElement = doc.createElement("contrasena");
-            passElement.appendChild(doc.createTextNode(user.getPasswordHash()));
-            Element ageElement = doc.createElement("edad");
-            ageElement.appendChild(doc.createTextNode(String.valueOf(user.getAge())));
-            Element mailElement = doc.createElement("email");
-            mailElement.appendChild(doc.createTextNode(user.getEmail()));
 
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(selectedFile.getAbsolutePath()));
+            Element nombre = doc.createElement("name");
+            nombre.appendChild(doc.createTextNode(user.getName()));
+            userElement.appendChild(nombre);
 
-            transformer.transform(source, result);
+            Element password = doc.createElement("password");
+            password.appendChild(doc.createTextNode(user.getPasswordHash()));
+            userElement.appendChild(password);
 
-        } catch (TransformerConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
+            Element edad = doc.createElement("age");
+            edad.appendChild(doc.createTextNode(String.valueOf(user.getAge())));
+            userElement.appendChild(edad);
+
+            Element email = doc.createElement("email");
+            email.appendChild(doc.createTextNode(user.getEmail()));
+            userElement.appendChild(email);
+
+            FileWriter fw = new FileWriter(selectedFile);
+            TransformerFactory.newInstance().newTransformer().transform(new DOMSource(doc), new StreamResult(fw));
+            fw.close();
+
+        } catch (ParserConfigurationException | TransformerException | IOException e) {
+            e.printStackTrace();
         }
     }
 }
