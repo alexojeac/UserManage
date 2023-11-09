@@ -62,9 +62,7 @@ public class Login extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnIniciarSesion) {
-            if (app.checkUser(textoUsuario.getText(), textoContraseña.getText())){
-                session = app.getSession();
-                app.setSession(true);
+            if(app.login(textoUsuario.getText(), textoContraseña.getText())) {
                 User userView = new User(app, textoUsuario.getText());
                 userView.setVisible(true);
             } else {

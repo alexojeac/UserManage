@@ -9,15 +9,16 @@ public class App {
     private User loggedUser;
     private FileHandler fileHandler;
 
-
     public App() {
         fileHandler = new FileHandler(new File(filename));
         users = fileHandler.readUsersFile();
     }
 
-    public Boolean checkUser(String userName, String pass) {
+    public boolean login(String userName, String pass) {
         this.loggedUser = users.getKeyValor(userName);
         if (loggedUser != null && loggedUser.checkPass(pass)) {
+            session = getSession();
+            setSession(true);
             return true;
         } else {
             return false;
@@ -30,6 +31,7 @@ public class App {
         user.setPass(newPass);
         users.removeUser(loggedUser.getName());
         users.putUser(user);
+
         fileHandler.resetFile();
     }
 
@@ -50,6 +52,14 @@ public class App {
         fileHandler.manageLoggerFile(session, login);
     }
 
+    public void createXmlFileUser(File selectedFile) {
+        XML.createXmlFileUser(loggedUser, selectedFile);
+    }
+
+    public void createJsonFileUser(File selectedFile) {
+        JSON.createJsonFileUser(loggedUser, selectedFile);
+    }
+
     public Session getSession() {
         return session;
     }
@@ -60,14 +70,6 @@ public class App {
 
     public String getUserMail() {
         return loggedUser.getEmail();
-    }
-
-    public String getUserPass() {
-        return loggedUser.getPasswordHash();
-    }
-
-    public User getLoggedUser() {
-        return loggedUser;
     }
 
 }

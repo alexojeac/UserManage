@@ -114,7 +114,7 @@ public class UserDetails extends JFrame implements ActionListener {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
 
-                XML.createXmlFileUser(app.getLoggedUser(), selectedFile);
+                app.createXmlFileUser(selectedFile);
                 System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
             } else {
                 System.out.println("Selección de archivo cancelada.");
@@ -130,7 +130,7 @@ public class UserDetails extends JFrame implements ActionListener {
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
 
-                JSON.createJsonFileUser(datoNombre.getText(), app.getUserPass(), Integer.parseInt(datoEdad.getText()), datoCorreo.getText(), selectedFile);
+                app.createJsonFileUser(selectedFile);
                 System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
             } else {
                 System.out.println("Selección de archivo cancelada.");
