@@ -4,10 +4,10 @@ import java.io.*;
 
 public class App {
     private final String filename = "usuarios.bin";
-    private Users users;
+    private final Users users;
     private Session session;
     private User loggedUser;
-    private FileHandler fileHandler;
+    private final FileHandler fileHandler;
 
     public App() {
         fileHandler = new FileHandler(new File(filename));
@@ -58,6 +58,10 @@ public class App {
 
     public void createJsonFileUser(File selectedFile) {
         JSON.createJsonFileUser(loggedUser, selectedFile);
+    }
+
+    public void createZipFile(File selectedFile) {
+        ZIP.createZipFile(users, selectedFile);
     }
 
     public Session getSession() {

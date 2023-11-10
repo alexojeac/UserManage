@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import model.App;
+import model.ZIP;
 
 public class User extends JFrame implements ActionListener {
 
@@ -95,6 +96,8 @@ public class User extends JFrame implements ActionListener {
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
+
+                app.createZipFile(selectedFile);
                 System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
             } else {
                 System.out.println("Selección de archivo cancelada.");

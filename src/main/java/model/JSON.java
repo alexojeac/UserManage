@@ -21,7 +21,17 @@ public class JSON {
 
     }
 
-    public static void createJsonFileUsersMap(Users users) {
+    public static File createJsonFileUsersMap(Users users) {
+        File file = new File("usuarios.json");
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder = gsonBuilder.setPrettyPrinting();
+        Gson gson = gsonBuilder.create();
 
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(users, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
     }
 }

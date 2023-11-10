@@ -51,4 +51,46 @@ public class XML {
             e.printStackTrace();
         }
     }
+
+    public static File createXmlFileUsers(Users users) {
+        File file = new File("usuarios.xml");
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.newDocument();
+
+            Element rootElement = doc.createElement("Users");
+            doc.appendChild(rootElement);
+
+            for (User user : users.getUsers().values()) {
+                Element usuarioElement = doc.createElement("User");
+                rootElement.appendChild(usuarioElement);
+
+                Element nameElement = doc.createElement("Name");
+                nameElement.appendChild(doc.createTextNode(String.valueOf(user.getName())));
+                usuarioElement.appendChild(nameElement);
+
+                Element idElement = doc.createElement("Password");
+                idElement.appendChild(doc.createTextNode(String.valueOf(user.getPasswordHash())));
+                usuarioElement.appendChild(idElement);
+
+                Element ageElement = doc.createElement("Age");
+                ageElement.appendChild(doc.createTextNode(String.valueOf(user.getAge())));
+                usuarioElement.appendChild(ageElement);
+
+                Element correoElement = doc.createElement("Email");
+                correoElement.appendChild(doc.createTextNode(user.getEmail()));
+                usuarioElement.appendChild(correoElement);
+            }
+
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(file);
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 }
