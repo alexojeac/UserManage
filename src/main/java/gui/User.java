@@ -112,6 +112,8 @@ public class User extends JFrame implements ActionListener {
         if (e.getSource() == btnCerrarSesion) {
             app.setSession(false);
             dispose();
+            Login login = new Login(app);
+            login.setVisible(true);
         }
 
         if (e.getSource() == btnCambiarContraseña) {
@@ -127,6 +129,7 @@ public class User extends JFrame implements ActionListener {
         if (e.getSource() == btnBorrarUsuario) {
             UserDelete userDeleteView = new UserDelete(app, nombreUsuario);
             userDeleteView.setVisible(true);
+            dispose();
         }
     }
 

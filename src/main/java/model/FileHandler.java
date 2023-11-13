@@ -3,6 +3,7 @@ package model;
 import java.io.*;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Arrays;
 
 public class FileHandler {
     private File file;
@@ -26,13 +27,17 @@ public class FileHandler {
     public Users readUsersFile() {
         usersCollection = new Users();
         try (FileInputStream fis = new FileInputStream(file)) {
+            if(!validateHeader(fis)) {
 
-            fis.skip(6);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-
-            usersCollection = (Users) ois.readObject();
-            return usersCollection;
-        } catch (ClassNotFoundException | IOException e) {
+                file.delete();
+                createUsersFile();
+                return usersCollection;
+            } else {
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.usersCollection = (Users) ois.readObject();
+                return usersCollection;
+            }
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -56,7 +61,6 @@ public class FileHandler {
     }
 
     private boolean validateHeader(FileInputStream fis) {
-        boolean isEquals = false;
         byte[] fileHeader = new byte[6];
 
         try {
@@ -68,15 +72,7 @@ public class FileHandler {
             throw new RuntimeException(e);
         }
 
-        for (int i = 0; i > HEADER.length; i++) {
-            if(fileHeader[i] == HEADER[i]) {
-                isEquals = true;
-            } else {
-                isEquals = false;
-            }
-        }
-
-        return isEquals;
+        return Arrays.compare(HEADER, fileHeader) == 0;
     }
 
     public void manageLoggerFile(Session session, boolean login) {
@@ -101,6 +97,4 @@ public class FileHandler {
             throw new RuntimeException(e);
         }
     }
-
-
 }

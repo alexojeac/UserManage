@@ -54,11 +54,15 @@ public class UserDelete extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnCancelar) {
             dispose();
+            User userView = new User(app, nombreUsuario);
+            userView.setVisible(true);
         }
 
         if (e.getSource() == btnBorrar) {
             app.deleteUser(nombreUsuario);
             dispose();
+            Login login = new Login(app);
+            login.setVisible(true);
         }
 
     }
