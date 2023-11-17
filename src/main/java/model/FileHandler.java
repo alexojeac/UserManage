@@ -28,15 +28,13 @@ public class FileHandler {
         usersCollection = new Users();
         try (FileInputStream fis = new FileInputStream(file)) {
             if(!validateHeader(fis)) {
-
                 file.delete();
                 createUsersFile();
-                return usersCollection;
             } else {
                 ObjectInputStream ois = new ObjectInputStream(fis);
                 this.usersCollection = (Users) ois.readObject();
-                return usersCollection;
             }
+            return usersCollection;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

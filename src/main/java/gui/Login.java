@@ -67,7 +67,10 @@ public class Login extends JFrame implements ActionListener {
                 userView.setVisible(true);
                 dispose();
             } else {
+                textoUsuario.setText("");
+                textoContraseña.setText("");
                 JOptionPane.showMessageDialog(this, "Usuario y/o contraseña incorrectos", "Error", JOptionPane.WARNING_MESSAGE);
+                textoUsuario.requestFocus();
             }
         }
     }
