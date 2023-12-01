@@ -1,6 +1,8 @@
 package model;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
@@ -27,6 +29,25 @@ public class FileHandler {
     public Users readUsersFile() {
         usersCollection = new Users();
         try (FileInputStream fis = new FileInputStream(file)) {
+            boolean validate = validateHeader(fis);
+
+            if (validate) {
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                this.usersCollection = (Users) ois.readObject();
+            } else {
+                fis.close();
+                file.delete();
+                createUsersFile();
+            }
+            return usersCollection;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*public Users readUsersFile() {
+        usersCollection = new Users();
+        try (FileInputStream fis = new FileInputStream(file)) {
             if(!validateHeader(fis)) {
                 file.delete();
                 createUsersFile();
@@ -38,7 +59,7 @@ public class FileHandler {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
+    }*/
 
     public void resetFile() {
         file.delete();

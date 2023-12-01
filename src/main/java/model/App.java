@@ -31,7 +31,6 @@ public class App {
         user.setPass(newPass);
         users.removeUser(loggedUser.getName());
         users.putUser(user);
-
         fileHandler.resetFile();
     }
 

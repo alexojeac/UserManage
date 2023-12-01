@@ -37,7 +37,7 @@ public class User implements Serializable {
         this.passwordHash = passwordHash;
     }
 
-    public Boolean checkPass(String pass) {
+    public boolean checkPass(String pass) {
         return BCrypt.checkpw(pass, passwordHash);
     }
 
